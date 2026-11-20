@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Review Digiperform Preet Vihar</title>
+<style>
+:root{--bg:#f4f6fb;--card:#fff;--tx:#1b1f2a;--mut:#667085;--pri:#e8590c;--bd:#e3e6ee;--box:#fff7f0;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#12141a;--card:#1c1f28;--tx:#eef0f6;--mut:#9aa3b5;--bd:#2c3140;--box:#2a2420;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#12141a;--card:#1c1f28;--tx:#eef0f6;--mut:#9aa3b5;--bd:#2c3140;--box:#2a2420;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;display:flex;justify-content:center;padding:20px}
+.c{background:var(--card);border:1px solid var(--bd);border-radius:18px;padding:24px;max-width:480px;width:100%;margin-top:20px}
+h1{font-size:22px;margin:0 0 4px}
+.sub{color:var(--mut);margin:0 0 16px;font-size:14px}
+.stars{font-size:28px;letter-spacing:4px;color:#f5b301;margin-bottom:10px}
+.r{background:var(--box);border-radius:12px;padding:16px;line-height:1.55;font-size:16px;min-height:100px;border:1px solid var(--bd)}
+.row{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+button{flex:1;min-width:140px;padding:14px;border-radius:12px;border:1px solid var(--bd);background:var(--card);color:var(--tx);font-size:15px;font-weight:600;cursor:pointer}
+button.p{background:var(--pri);border-color:var(--pri);color:#fff}
+.st{margin-top:14px;font-size:13px;color:var(--mut);text-align:center;min-height:18px}
+.steps{margin:16px 0 0;padding-left:18px;font-size:13px;color:var(--mut);line-height:1.6}
+</style>
+</head>
+<body>
+<div class="c">
+  <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+  <h1>Thank you for visiting us</h1>
+  <p class="sub">Digiperform &ndash; Digital Marketing Institute, Preet Vihar</p>
+  <div class="r" id="rev">Generating review&hellip;</div>
+  <div class="row">
+    <button id="new">&#128260; Generate another</button>
+    <button id="copy">&#128203; Copy only</button>
+  </div>
+  <div class="row"><button id="go" class="p">Copy &amp; Write Review on Google &rarr;</button></div>
+  <div class="st" id="st"></div>
+  <ol class="steps">
+    <li>Tap the orange button. The review is copied and Google opens.</li>
+    <li>Paste the review in the box, edit it to match your experience, and post.</li>
+  </ol>
+</div>
+<script>
+// ===== EDIT THESE =====
+var GOOGLE_REVIEW_LINK = "https://g.page/r/CeSsDGL7zEHgEBM/review";
+var BUSINESS = "Digiperform Preet Vihar";
+// ======================
+
+var OPEN = [
+ "Had a great learning experience at "+BUSINESS+".",
+ "Joined "+BUSINESS+" for digital marketing training and I am very happy with my decision.",
+ "Highly recommend "+BUSINESS+" for anyone who wants to build a career in digital marketing.",
+ "Really impressed with the digital marketing course at "+BUSINESS+".",
+ "I recently learned digital marketing at "+BUSINESS+" and the experience has been excellent.",
+ "Best place in Preet Vihar to learn digital marketing, in my experience.",
+ "Wonderful institute for digital marketing. Glad I chose "+BUSINESS+".",
+ "Very satisfied with my training at "+BUSINESS+"."
+];
+var TRAIN = [
+ "The trainers are knowledgeable, patient and explain every concept in a simple way.",
+ "Faculty members are supportive and always ready to clear doubts.",
+ "The teaching is practical and focuses on real-world campaigns, not just theory.",
+ "Classes are well structured and easy to follow, even for beginners.",
+ "The trainers share real industry examples which makes learning much more interesting.",
+ "Every topic is taught step by step with hands-on practice.",
+ "The mentors give personal attention to every student."
+];
+var TOPICS = [
+ "I learned SEO, social media marketing, Google Ads and content marketing in a very practical manner.",
+ "The course covers SEO, Google Ads, social media, email marketing and analytics in good depth.",
+ "Topics like SEO, Meta Ads, Google Analytics and content strategy were taught really well.",
+ "Learning live tools and running real campaigns gave me a lot of confidence.",
+ "The curriculum is updated and matches what companies expect from digital marketers today.",
+ "Hands-on assignments and projects helped me understand how digital marketing works in real life."
+];
+var PLACE = [
+ "The environment is friendly, professional and great for learning.",
+ "The institute is easy to reach and the atmosphere is very positive.",
+ "The staff is cooperative and guided me properly from counselling to course completion.",
+ "The counsellors were honest and helped me choose the right course.",
+ "Good learning environment with motivating faculty and helpful staff."
+];
+var CLOSE = [
+ "Highly recommended for students and working professionals alike!",
+ "Thank you to the whole team for the guidance.",
+ "Five stars, well deserved!",
+ "If you are planning to start a career in digital marketing, do visit once.",
+ "Definitely worth it. Thank you, team!",
+ "I would happily recommend it to my friends and family.",
+ "Keep up the great work!"
+];
+
+var seen = {};
+function pick(a){ return a[Math.floor(Math.random()*a.length)]; }
+function gen(){
+  for (var i=0;i<60;i++){
+    var p=[pick(OPEN), pick(TRAIN), pick(TOPICS)];
+    if (Math.random()<0.6) p.push(pick(PLACE));
+    p.push(pick(CLOSE));
+    var t=p.join(" ");
+    if(!seen[t]){ seen[t]=1; return t; }
+  }
+  return pick(OPEN)+" "+pick(CLOSE);
+}
+var rev=document.getElementById("rev"), st=document.getElementById("st"), cur="";
+function show(){ cur=gen(); rev.textContent=cur; st.textContent=""; }
+function copyText(t){
+  if(navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(t);
+  return new Promise(function(res,rej){
+    var ta=document.createElement("textarea"); ta.value=t; ta.style.position="fixed"; ta.style.opacity="0";
+    document.body.appendChild(ta); ta.select();
+    try{ document.execCommand("copy") ? res() : rej(); }catch(e){ rej(); }
+    document.body.removeChild(ta);
+  });
+}
+document.getElementById("new").onclick=show;
+document.getElementById("copy").onclick=function(){
+  copyText(cur).then(function(){ st.textContent="Copied! Now paste it on Google."; },
+                     function(){ st.textContent="Please select the text and copy it manually."; });
+};
+document.getElementById("go").onclick=function(){
+  var w=window.open("about:blank","_blank");
+  copyText(cur).then(function(){ st.textContent="Copied! Paste it on the Google page."; },
+                     function(){ st.textContent="Please copy the text manually."; })
+  .then(function(){ if(w){ w.location.href=GOOGLE_REVIEW_LINK; } else { window.location.href=GOOGLE_REVIEW_LINK; } });
+};
+show();
+</script>
+</body>
+</html>
