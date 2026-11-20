@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Leave us a review</title>
+<style>
+:root{--bg:#f6f7fb;--card:#fff;--tx:#1b1f2a;--mut:#667085;--pri:#1a73e8;--bd:#e3e6ee;--box:#f0f4ff;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#12141a;--card:#1c1f28;--tx:#eef0f6;--mut:#9aa3b5;--bd:#2c3140;--box:#232a3d;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#12141a;--card:#1c1f28;--tx:#eef0f6;--mut:#9aa3b5;--bd:#2c3140;--box:#232a3d;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;display:flex;justify-content:center;padding:20px}
+.c{background:var(--card);border:1px solid var(--bd);border-radius:18px;padding:24px;max-width:460px;width:100%;margin-top:20px}
+h1{font-size:22px;margin:0 0 6px}p.s{color:var(--mut);margin:0 0 18px;font-size:14px}
+.stars{font-size:28px;letter-spacing:4px;color:#f5b301;margin-bottom:10px}
+.r{background:var(--box);border-radius:12px;padding:16px;line-height:1.55;font-size:16px;min-height:90px;border:1px solid var(--bd)}
+.row{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+button{flex:1;min-width:130px;padding:13px;border-radius:12px;border:1px solid var(--bd);background:var(--card);color:var(--tx);font-size:15px;font-weight:600;cursor:pointer}
+button.p{background:var(--pri);border-color:var(--pri);color:#fff}
+button:disabled{opacity:.45;cursor:not-allowed}
+.st{margin-top:14px;font-size:13px;color:var(--mut);text-align:center;min-height:18px}
+</style>
+</head>
+<body>
+<div class="c">
+  <div class="stars">★★★★★</div>
+  <h1>Share your experience</h1>
+  <p class="s">1) Review copy karein &nbsp;2) “Next” dabayein &nbsp;3) Google par paste karke Post karein.</p>
+  <div class="r" id="rev"></div>
+  <div class="row">
+    <button id="new">🔄 Another review</button>
+    <button id="copy" class="p">📋 Copy review</button>
+  </div>
+  <div class="row"><button id="next" class="p" disabled>Next → Open Google Review</button></div>
+  <div class="st" id="st">Pehle review copy karein</div>
+</div>
+<script>
+// ====== EDIT THESE ======
+var GMB_LINK = "https://share.google/cxfNLxzKsEVQSNugz"; // better: your direct "Get more reviews" link
+var BUSINESS = ""; // e.g. "Sharma Dental Clinic" (leave empty to skip name)
+// ========================
+var A=["Had a really great experience here.","Highly recommend this place!","Very happy with the service.","Excellent experience overall.","Truly impressed with everything.","Wonderful experience from start to finish.","Visited recently and loved it.","Absolutely satisfied with the service."];
+var B=["The staff was polite, professional and very helpful.","The team is friendly and clearly knows what they are doing.","Everyone was warm, welcoming and attentive to my needs.","Service was quick and the quality was top-notch.","They explained everything clearly and answered all my questions.","The whole process was smooth and hassle-free.","I felt well taken care of throughout.","Great attention to detail and genuine care for customers."];
+var C=["The place is clean and well maintained.","Prices are fair and completely transparent.","They really value your time.","Got exactly what I was looking for.","The results exceeded my expectations.","You can tell they take pride in their work.","Everything was done on time.","Very reliable and trustworthy."];
+var D=["Will definitely come back!","Would happily recommend to friends and family.","Five stars, well deserved!","Thank you to the whole team!","Keep up the great work!","Definitely worth a visit.","10/10 would recommend.","Thank you for the wonderful service!"];
+var seen={},last="";
+function pick(a){return a[Math.floor(Math.random()*a.length)]}
+function gen(){
+  for(var i=0;i<50;i++){
+    var parts=[pick(A),pick(B)];
+    if(Math.random()<.75)parts.push(pick(C));
+    parts.push(pick(D));
+    var t=parts.join(" ");
+    if(BUSINESS&&Math.random()<.5)t=t.replace(/^[^.!]*[.!]/,function(m){return m+" "+BUSINESS+" is great."});
+    if(!seen[t]){seen[t]=1;return t}
+  }
+  return pick(A)+" "+pick(D);
+}
+var rev=document.getElementById("rev"),st=document.getElementById("st"),nx=document.getElementById("next");
+function show(){last=gen();rev.textContent=last;nx.disabled=true;st.textContent="Pehle review copy karein"}
+function copyText(t){
+  if(navigator.clipboard&&window.isSecureContext)return navigator.clipboard.writeText(t);
+  return new Promise(function(res,rej){var ta=document.createElement("textarea");ta.value=t;ta.style.position="fixed";ta.style.opacity="0";document.body.appendChild(ta);ta.select();try{document.execCommand("copy")?res():rej()}catch(e){rej()}document.body.removeChild(ta)});
+}
+document.getElementById("new").onclick=show;
+document.getElementById("copy").onclick=function(){
+  copyText(last).then(function(){nx.disabled=false;st.textContent="✅ Copied! Ab “Next” dabayein aur Google par paste karein."},
+  function(){nx.disabled=false;st.textContent="Review ko manually select karke copy karein, phir Next dabayein."});
+};
+nx.onclick=function(){window.open(GMB_LINK,"_blank","noopener")};
+show();
+</script>
+</body>
+</html>
